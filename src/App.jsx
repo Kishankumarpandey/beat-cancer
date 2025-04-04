@@ -11,13 +11,15 @@ const App = () => {
   const { user, authenticated, ready, login, currentUser } = useStateContext();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (ready && !authenticated) {
-      login();
-    } else if (user && !currentUser) {
-      navigate("/onboarding");
+ useEffect(() => {
+    if (!ready) return;  // Ensure the auth state is loaded before running logic
+
+    if (authenticated && user) {
+        navigate("/home");  // Redirect authenticated users to home
+    } else {
+        navigate("/onboarding");  // Redirect unauthenticated users to onboarding/login page
     }
-  }, [user, authenticated, ready, login, currentUser, navigate]);
+}, [ready, authenticated, user, navigate]);
 
   return (
     <div className="sm:-8 relative flex min-h-screen flex-row bg-[#13131a] p-4">
